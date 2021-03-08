@@ -1,7 +1,13 @@
 import React from 'react';
 import { Image } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 import manager from '../../oauth/manager';
+import { authenticate } from '../../services/auth';
+import { setDevInfo } from '../../store/actions/dev';
+import { setToken } from '../../store/actions';
+import { getDevInfo } from '../../services/dev';
 
 import logo from '../../assets/logo.png';
 import githubLogo from '../../assets/github_logo.png';
@@ -10,9 +16,19 @@ import background from '../../assets/background.png';
 import { Container, Title, LoginButton, LoginText, Background } from './styles';
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
   async function handleLogin() {
     const response = await manager.authorize('github');
-    console.log(response);
+    const githubToken = response.response.credentials.accessToken;
+    const { token, username } = await authenticate(githubToken);
+    dispatch(setToken(token));
+
+    const devInfo = await getDevInfo(username);
+    dispatch(setDevInfo(devInfo));
+
+    navigation.navigate('Feed');
   }
 
   return (
