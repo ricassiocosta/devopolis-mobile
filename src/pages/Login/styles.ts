@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { RectButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
   flex: 1;
@@ -13,7 +14,7 @@ export const Title = styled.Text`
   margin: 60px 24px;
 `;
 
-export const LoginButton = styled.TouchableOpacity`
+export const LoginButton = styled(RectButton)`
   width: 200px;
   height: 46px;
   margin-top: 48px;

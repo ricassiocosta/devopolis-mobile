@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { View } from 'react-native';
+import { View, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -13,6 +13,7 @@ const App: React.FC = () => (
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <View style={{ backgroundColor: '#fcfdfe', flex: 1 }}>
+          <StatusBar backgroundColor='#008cff' />
           <Routes />
         </View>
       </NavigationContainer>
