@@ -28,7 +28,7 @@ const Login: React.FC = () => {
     const devInfo = await getDevInfo(username);
     dispatch(setDevInfo(devInfo));
 
-    navigation.navigate('Feed');
+    navigation.navigate('NavigationTabs');
   }
 
   return (
