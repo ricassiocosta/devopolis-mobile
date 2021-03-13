@@ -35,9 +35,10 @@ export const Description = styled.Text`
   margin-left: 8px;
 `;
 
-export const Like = styled.View`
+export const Like = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
+  width: 32px;
 `;
 
 export const PostImage = styled(Image)`

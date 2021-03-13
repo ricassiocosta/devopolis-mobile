@@ -33,7 +33,7 @@ const Post: React.FC<Options> = ({ authorPhoto, author, post, thumbnail }) => {
       )}
       <Like>
         <Image
-          style={{ marginLeft: 8, marginTop: 8, height: 16, width: 16 }}
+          style={{ marginLeft: 8, marginTop: 8, height: 20, width: 20 }}
           source={likeImg}
         />
       </Like>
