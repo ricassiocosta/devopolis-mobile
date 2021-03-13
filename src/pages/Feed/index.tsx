@@ -38,23 +38,25 @@ const Feed: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <ScrollView>
-      <Container>
-        <Header avatar_url={devInfo.avatar_url} searchEnabled />
-        {posts &&
-          posts
-            .map(post => (
-              <Post
-                key={post._id}
-                author={post.author}
-                authorPhoto={post.authorPhoto}
-                post={post.post}
-                thumbnail={post.thumbnail}
-              />
-            ))
-            .reverse()}
-      </Container>
-    </ScrollView>
+    <>
+      <Header avatar_url={devInfo.avatar_url} searchEnabled />
+      <ScrollView>
+        <Container>
+          {posts &&
+            posts
+              .map(post => (
+                <Post
+                  key={post._id}
+                  author={post.author}
+                  authorPhoto={post.authorPhoto}
+                  post={post.post}
+                  thumbnail={post.thumbnail}
+                />
+              ))
+              .reverse()}
+        </Container>
+      </ScrollView>
+    </>
   );
 };
 
