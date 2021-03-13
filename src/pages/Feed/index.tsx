@@ -7,6 +7,7 @@ import { logout } from '../../store/actions';
 
 import Header from '../../components/Header';
 import Post from '../../components/Post';
+import Footer from '../../components/Footer';
 
 import { Container } from './styles';
 
@@ -56,6 +57,7 @@ const Feed: React.FC = () => {
               .reverse()}
         </Container>
       </ScrollView>
+      <Footer home />
     </>
   );
 };

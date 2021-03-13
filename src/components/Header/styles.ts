@@ -2,7 +2,6 @@ import styled from 'styled-components/native';
 import { Image } from 'react-native';
 
 export const Container = styled.View`
-  z-index: 1;
   height: 48px;
   width: 100%;
   background: #008cff;
