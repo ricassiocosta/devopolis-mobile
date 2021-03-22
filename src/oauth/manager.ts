@@ -7,7 +7,7 @@ const managerConfig = {
   },
 };
 
-const manager = new OAuthManager('devopolis');
+const manager = new OAuthManager('Devopolis');
 
 manager.configure(managerConfig);
 
