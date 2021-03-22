@@ -8,7 +8,7 @@ import { Container, Logo, Avatar, Search } from './styles';
 
 interface Options {
   avatar_url: string;
-  searchEnabled: boolean;
+  searchEnabled?: boolean;
 }
 
 const Header: React.FC<Options> = ({ avatar_url, searchEnabled = false }) => {
