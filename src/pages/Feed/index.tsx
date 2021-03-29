@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { getDashboard } from '../../services/dashboard';
 import { logout } from '../../store/actions';
@@ -20,9 +20,6 @@ interface PostInterface {
 
 const Feed: React.FC = () => {
   const dispatch = useDispatch();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const devInfo = useSelector(state => state.dev.devInfo);
   const [posts, setPosts] = useState<PostInterface[]>([]);
 
   useEffect(() => {
@@ -39,7 +36,7 @@ const Feed: React.FC = () => {
 
   return (
     <>
-      <Header avatar_url={devInfo.avatar_url} searchEnabled />
+      <Header searchEnabled />
       <ScrollView>
         <Container>
           {posts &&

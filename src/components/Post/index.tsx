@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image } from 'react-native';
 
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/core';
 import {
   Container,
   PostTitle,
@@ -22,12 +24,18 @@ interface Options {
 }
 
 const Post: React.FC<Options> = ({ authorPhoto, author, post, thumbnail }) => {
+  const navigation = useNavigation();
+
   return (
     <Container>
-      <PostTitle>
-        <Avatar source={{ uri: authorPhoto }} />
-        <DevUsername>{author}</DevUsername>
-      </PostTitle>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Profile', { username: author })}
+      >
+        <PostTitle>
+          <Avatar source={{ uri: authorPhoto }} />
+          <DevUsername>{author}</DevUsername>
+        </PostTitle>
+      </TouchableOpacity>
       {thumbnail && (
         <PostImage source={{ uri: `data:image/png;base64,${thumbnail}` }} />
       )}
