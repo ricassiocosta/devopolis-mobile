@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { getPosts } from '../../services/posts';
 import { getDevInfo, follow, unfollow } from '../../services/dev';
 
@@ -13,7 +14,11 @@ import {
   DevHeaderImageContainer,
   DevHeaderInfoContainer,
   DevName,
+  Divider,
+  PostHistory,
+  PostThumbnail,
   Stats,
+  ThumbnailContainer,
 } from './styles';
 
 interface DevInfo {
@@ -28,6 +33,7 @@ interface DevInfo {
 }
 
 interface Post {
+  _id: string;
   author: string;
   thumbnail: string;
   title: string;
@@ -129,6 +135,26 @@ const Profile: React.FC<Props> = ({ route }) => {
             </View>
           </DevHeaderInfoContainer>
         </DevHeader>
+        <Divider />
+        <PostHistory>
+          {posts && (
+            <FlatList
+              columnWrapperStyle={{ justifyContent: 'space-between' }}
+              data={posts}
+              horizontal={false}
+              keyExtractor={item => item._id}
+              numColumns={3}
+              renderItem={({ item }) => (
+                <ThumbnailContainer>
+                  <PostThumbnail
+                    key={item.title}
+                    source={{ uri: `data:image/png;base64,${item.thumbnail}` }}
+                  />
+                </ThumbnailContainer>
+              )}
+            />
+          )}
+        </PostHistory>
       </Container>
     </>
   );

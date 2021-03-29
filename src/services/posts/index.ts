@@ -1,6 +1,7 @@
 import api from '../api';
 
 interface Post {
+  _id: string;
   author: string;
   thumbnail: string;
   title: string;

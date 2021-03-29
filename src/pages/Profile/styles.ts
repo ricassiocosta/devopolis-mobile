@@ -1,4 +1,4 @@
-import { Image } from 'react-native';
+import { Image, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Container = styled.View``;
@@ -21,6 +21,7 @@ export const DevHeaderImageContainer = styled.View`
 
 export const DevHeaderInfoContainer = styled.View`
   width: 236px;
+  position: relative;
 `;
 
 export const DevHeaderUsernameContainer = styled.View``;
@@ -37,4 +38,31 @@ export const Bio = styled.Text`
 
 export const Stats = styled.Text`
   font-size: 12px;
+  position: absolute;
+  top: 108px;
+`;
+
+export const Divider = styled.View`
+  margin: 8px auto;
+  width: 350px;
+  border-color: #c4c4c4;
+  border: 0.5px;
+`;
+
+export const PostHistory = styled.View`
+  flex: 1;
+  width: ${Dimensions.get('screen').width + 2}px;
+  margin-left: -1px;
+  margin-top: 8px;
+`;
+
+export const PostThumbnail = styled(Image)`
+  height: ${Dimensions.get('screen').width / 3 + 10}px;
+  width: ${Dimensions.get('screen').width / 3}px;
+`;
+
+export const ThumbnailContainer = styled.View`
+  border: 1px;
+  border-style: solid;
+  border-color: #fff;
 `;
