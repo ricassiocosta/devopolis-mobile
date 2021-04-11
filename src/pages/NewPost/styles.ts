@@ -27,6 +27,12 @@ export const NewPostContainer = styled(RectButton)`
   flex: 1;
 `;
 
+export const NewPostImage = styled(Image)`
+  width: ${Dimensions.get('screen').width}px;
+  max-height: ${Dimensions.get('screen').width}px;
+  flex: 1;
+`;
+
 export const NewPostDescriptionContainer = styled.View`
   margin: 4px auto;
   width: 350px;
