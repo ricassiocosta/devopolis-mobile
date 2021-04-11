@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { Image, Text, View } from 'react-native';
+import { /* Image, */ Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { getPosts } from '../../services/posts';
-import { getDevInfo, follow, unfollow } from '../../services/dev';
+import { getDevInfo /* follow, unfollow */ } from '../../services/dev';
 
 import Header from '../../components/Header';
 import { Container } from '../Login/styles';
@@ -52,8 +52,8 @@ const Profile: React.FC<Props> = ({ route }) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [profileInfo, setProfileInfo] = useState<DevInfo>();
   const [profileConnections, setProfileConnections] = useState(0);
-  const [isFollowed, setIsFollowed] = useState(false);
-  const [isOwnProfile, setIsOwnProfile] = useState(false);
+  // const [isFollowed, setIsFollowed] = useState(false);
+  // const [isOwnProfile, setIsOwnProfile] = useState(false);
   const [username, setUsername] = useState('');
 
   useEffect(() => {

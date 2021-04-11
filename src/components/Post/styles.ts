@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 
 export const Container = styled.View`
   width: 100%;
-  margin: 0 auto 20px;
+  margin: 0 auto 16px;
   background: #fbfbfb;
   border: 1px solid #d2d2d2;
   border-radius: 5px;
