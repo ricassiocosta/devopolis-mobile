@@ -30,15 +30,13 @@ export async function getPost(username: string, postId: string): Promise<Post> {
   }
 }
 
-/* export const createPost = async (content, thumbnail) => {
-  const formData = new FormData()
-  formData.append('thumbnail', thumbnail)
-  formData.append('post', content)
-
-  const headers = {
-    'Content-Type': 'multipart/form-data'
-  }
-
-  const response = await api.post('/posts/', formData, { headers })
-  return response.data
-} */
+export const createPost = async (
+  content: string,
+  thumbnail: string,
+): Promise<Post> => {
+  const response = await api.post('/posts/', {
+    post: content,
+    thumbnail,
+  });
+  return response.data;
+};

@@ -8,6 +8,7 @@ export const Container = styled(KeyboardAvoidingView)`
 `;
 
 export const NewPostHeader = styled.View`
+  position: relative;
   margin: 8px auto;
   width: 350px;
 `;
@@ -51,4 +52,23 @@ export const Divider = styled.View`
 
 export const CameraImg = styled(Image)`
   margin: auto auto;
+`;
+
+export const PublishButton = styled.TouchableOpacity`
+  position: absolute;
+  width: 80px;
+  height: 24px;
+  background-color: #008cff;
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2px;
+  right: 0;
+  top: 12px;
+`;
+
+export const PublishButtonText = styled.Text`
+  font-family: 'Roboto-Bold';
+  font-size: 14px;
+  color: #fff;
 `;
