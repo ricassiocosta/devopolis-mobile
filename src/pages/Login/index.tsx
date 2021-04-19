@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
+import AsyncStorage from '@react-native-community/async-storage';
 import manager from '../../oauth/manager';
 import { authenticate } from '../../services/auth';
 import { setDevInfo } from '../../store/actions/dev';
@@ -15,16 +16,45 @@ import background from '../../assets/background.png';
 
 import { Container, Title, LoginButton, LoginText, Background } from './styles';
 
+interface State {
+  dev: {
+    devInfo: {
+      username: string;
+    };
+  };
+}
+
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const loggedDev = useSelector((state: State) => ({
+    state: state.dev.devInfo,
+  }));
+
+  useEffect(() => {
+    async function getTokenFromStorage() {
+      const token = await AsyncStorage.getItem('TOKEN');
+      const username = await AsyncStorage.getItem('USERNAME');
+      if (token && username) {
+        const devInfo = await getDevInfo(username);
+        dispatch(setDevInfo(devInfo));
+
+        navigation.navigate('NavigationTabs');
+      }
+    }
+
+    getTokenFromStorage();
+  }, [dispatch, loggedDev.state.username, navigation]);
 
   async function handleLogin() {
     const response = await manager.authorize('github');
     const githubToken = response.response.credentials.accessToken;
     const { token, username } = await authenticate(githubToken);
-    dispatch(setToken(token));
 
+    await AsyncStorage.setItem('TOKEN', token);
+    await AsyncStorage.setItem('USERNAME', username);
+
+    dispatch(setToken(token));
     const devInfo = await getDevInfo(username);
     dispatch(setDevInfo(devInfo));
 

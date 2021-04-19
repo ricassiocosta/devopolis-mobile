@@ -140,7 +140,7 @@ const Profile: React.FC<Props> = ({ route }) => {
           {posts && (
             <FlatList
               columnWrapperStyle={{ justifyContent: 'space-between' }}
-              data={posts}
+              data={posts.reverse()}
               horizontal={false}
               keyExtractor={item => item._id}
               numColumns={3}

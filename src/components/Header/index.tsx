@@ -11,11 +11,20 @@ interface Options {
   searchEnabled?: boolean;
 }
 
+interface State {
+  dev: {
+    devInfo: {
+      github_username: string;
+      avatar_url: string;
+    };
+  };
+}
+
 const Header: React.FC<Options> = ({ searchEnabled = false }) => {
   const navigation = useNavigation();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const devInfo = useSelector(state => state.dev.devInfo);
+  const devInfo = useSelector((state: State) => ({
+    state: state.dev.devInfo,
+  }));
 
   return (
     <Container>
@@ -23,10 +32,12 @@ const Header: React.FC<Options> = ({ searchEnabled = false }) => {
       {searchEnabled && <Search source={searchImg} />}
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('Profile', { username: devInfo.github_username })
+          navigation.navigate('Profile', {
+            username: devInfo.state.github_username,
+          })
         }
       >
-        <Avatar source={{ uri: devInfo.avatar_url }} />
+        <Avatar source={{ uri: devInfo.state.avatar_url }} />
       </TouchableOpacity>
     </Container>
   );
