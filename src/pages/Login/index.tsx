@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Image } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -16,20 +16,9 @@ import background from '../../assets/background.png';
 
 import { Container, Title, LoginButton, LoginText, Background } from './styles';
 
-interface State {
-  dev: {
-    devInfo: {
-      username: string;
-    };
-  };
-}
-
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const loggedDev = useSelector((state: State) => ({
-    state: state.dev.devInfo,
-  }));
 
   useEffect(() => {
     async function getTokenFromStorage() {
@@ -44,7 +33,7 @@ const Login: React.FC = () => {
     }
 
     getTokenFromStorage();
-  }, [dispatch, loggedDev.state.username, navigation]);
+  }, [dispatch, navigation]);
 
   async function handleLogin() {
     const response = await manager.authorize('github');

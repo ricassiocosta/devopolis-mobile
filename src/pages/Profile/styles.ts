@@ -68,3 +68,48 @@ export const ThumbnailContainer = styled.View`
   border-style: solid;
   border-color: #fff;
 `;
+
+export const FollowButton = styled.TouchableOpacity`
+  position: absolute;
+  width: 80px;
+  height: 24px;
+  background-color: #008cff;
+
+  right: 0;
+  top: 4px;
+
+  border-radius: 4px;
+
+  align-items: center;
+  z-index: 1;
+`;
+
+export const FollowButtonText = styled.Text`
+  color: white;
+  font-family: 'Roboto-Bold';
+
+  line-height: 20px;
+`;
+
+export const UnfollowButton = styled.TouchableOpacity`
+  position: absolute;
+  width: 100px;
+  height: 24px;
+  background-color: #f5381f;
+
+  right: 0;
+  top: 4px;
+
+  border-radius: 4px;
+
+  align-items: center;
+  z-index: 1;
+`;
+
+export const UnfollowButtonText = styled.Text`
+  color: white;
+  font-family: 'Roboto-Bold';
+  font-size: 12px;
+
+  line-height: 20px;
+`;
