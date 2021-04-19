@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 
 import { getDashboard } from '../../services/dashboard';
@@ -21,6 +21,7 @@ interface PostInterface {
 const Feed: React.FC = () => {
   const dispatch = useDispatch();
   const [posts, setPosts] = useState<PostInterface[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     async function callApi() {
@@ -34,10 +35,28 @@ const Feed: React.FC = () => {
     callApi();
   }, [dispatch]);
 
+  const HandleRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    async function callApi() {
+      try {
+        const receivedPosts = await getDashboard();
+        setPosts(receivedPosts);
+      } catch (error) {
+        dispatch(logout());
+      }
+    }
+    callApi();
+    setRefreshing(false);
+  }, [dispatch]);
+
   return (
     <>
       <Header searchEnabled />
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={HandleRefresh} />
+        }
+      >
         <Container>
           {posts &&
             posts
