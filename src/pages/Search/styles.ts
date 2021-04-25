@@ -1,3 +1,4 @@
+import { Image } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
@@ -8,13 +9,22 @@ export const Container = styled.View`
 `;
 
 export const SearchContainer = styled.View`
-  background-color: lightgray;
+  background-color: #eee;
   border-radius: 8px;
+
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const SearchIcon = styled(Image)`
+  width: 24px;
+  height: 24px;
+
+  margin-left: 8px;
 `;
 
 export const SearchInput = styled.TextInput`
   padding: 8px;
-  padding-left: 16px;
 `;
 
 export const QueriedDev = styled.TouchableOpacity`

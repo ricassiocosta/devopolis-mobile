@@ -11,18 +11,17 @@ import {
   QueriedDevImage,
   QueriedDevText,
   SearchContainer,
+  SearchIcon,
   SearchInput,
 } from './styles';
+
+import searchImg from '../../assets/search-icon.png';
 
 interface DevInfo {
   _id: string;
   name: string;
   github_username: string;
   avatar_url: string;
-  bio: string;
-  followedList: string[];
-  likedPosts: string[];
-  techs: string[];
 }
 
 const Profile: React.FC = () => {
@@ -54,12 +53,18 @@ const Profile: React.FC = () => {
       <Header />
       <Container>
         <SearchContainer>
-          <SearchInput autoFocus onChangeText={text => onSearch(text)} />
+          <SearchIcon source={searchImg} />
+          <SearchInput
+            placeholder='Pesquisar'
+            autoFocus
+            onChangeText={text => onSearch(text)}
+          />
         </SearchContainer>
         {queriedDevs &&
           queriedDevs.map(dev => {
             return (
               <QueriedDev
+                key={dev._id}
                 onPress={() =>
                   navigation.navigate('Profile', {
                     username: dev.github_username,
@@ -67,7 +72,7 @@ const Profile: React.FC = () => {
                 }
               >
                 <QueriedDevImage source={{ uri: dev.avatar_url }} />
-                <QueriedDevText key={dev._id} style={{ color: '#000' }}>
+                <QueriedDevText style={{ color: '#000' }}>
                   {dev.name}
                 </QueriedDevText>
               </QueriedDev>
