@@ -25,10 +25,16 @@ const Login: React.FC = () => {
       const token = await AsyncStorage.getItem('TOKEN');
       const username = await AsyncStorage.getItem('USERNAME');
       if (token && username) {
-        const devInfo = await getDevInfo(username);
-        dispatch(setDevInfo(devInfo));
-
-        navigation.navigate('NavigationTabs');
+        getDevInfo(username)
+          .then(devInfo => {
+            if (devInfo) {
+              dispatch(setDevInfo(devInfo));
+              navigation.navigate('NavigationTabs');
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     }
 
