@@ -5,7 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import searchImg from '../../assets/search.png';
 
-import { Container, Logo, Avatar, Search } from './styles';
+import { Container, Logo, Avatar, SearchImage, Search } from './styles';
 
 interface Options {
   searchEnabled?: boolean;
@@ -26,10 +26,18 @@ const Header: React.FC<Options> = ({ searchEnabled = false }) => {
     state: state.dev.devInfo,
   }));
 
+  function handleSearch() {
+    navigation.navigate('Search');
+  }
+
   return (
     <Container>
       <Logo>Devopolis</Logo>
-      {searchEnabled && <Search source={searchImg} />}
+      {searchEnabled && (
+        <Search onPress={handleSearch}>
+          <SearchImage source={searchImg} />
+        </Search>
+      )}
       <TouchableOpacity
         onPress={() =>
           navigation.navigate('Profile', {

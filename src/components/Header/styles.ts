@@ -23,6 +23,8 @@ export const Avatar = styled(Image)`
   border-radius: 16px;
 `;
 
-export const Search = styled(Image)`
+export const SearchImage = styled(Image)`
   margin-left: 100px;
 `;
+
+export const Search = styled.TouchableOpacity``;
