@@ -27,20 +27,20 @@ export const SubTitleContainer = styled.View`
 `;
 
 export const HeartImage = styled(Image)`
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   margin-left: 8px;
 
   position: absolute;
-  right: 108px;
-  top: 34px;
+  right: 214px;
+  top: 29px;
 `;
 
 export const SubTitle = styled.Text`
   font-family: 'Roboto-Bold';
   color: #008cff;
 
-  font-size: 24px;
+  font-size: 20px;
   margin-left: 16px;
   padding-right: 16px;
 `;

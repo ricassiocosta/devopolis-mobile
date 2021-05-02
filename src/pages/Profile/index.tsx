@@ -172,8 +172,8 @@ const Profile: React.FC<Props> = ({ route }) => {
           </DevHeaderInfoContainer>
         </DevHeader>
         <Divider />
-        <PostHistory>
-          {posts && (
+        {posts && (
+          <PostHistory>
             <FlatList
               columnWrapperStyle={{ justifyContent: 'space-between' }}
               data={posts.reverse()}
@@ -189,8 +189,8 @@ const Profile: React.FC<Props> = ({ route }) => {
                 </ThumbnailContainer>
               )}
             />
-          )}
-        </PostHistory>
+          </PostHistory>
+        )}
       </Container>
     </>
   );
