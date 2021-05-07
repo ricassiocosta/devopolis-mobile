@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { /* Image, */ Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPosts } from '../../services/posts';
@@ -164,15 +164,19 @@ const Profile: React.FC<Props> = ({ route }) => {
                   <UnfollowButtonText>Deixar de seguir</UnfollowButtonText>
                 </UnfollowButton>
               )}
-              <DevName>{profileInfo?.name}</DevName>
-              <Text>{profileInfo?.github_username}</Text>
-              <Bio>{`"${profileInfo?.bio}"`}</Bio>
+              {profileInfo && (
+                <>
+                  <DevName>{profileInfo.name}</DevName>
+                  <Text>{profileInfo.github_username}</Text>
+                  <Bio>{`"${profileInfo.bio}"`}</Bio>
+                </>
+              )}
               <Stats>{`${posts.length} Publicações | ${profileConnections} Conexões`}</Stats>
             </View>
           </DevHeaderInfoContainer>
         </DevHeader>
         <Divider />
-        {posts && (
+        {posts && posts.length > 0 && (
           <PostHistory>
             <FlatList
               columnWrapperStyle={{ justifyContent: 'space-between' }}

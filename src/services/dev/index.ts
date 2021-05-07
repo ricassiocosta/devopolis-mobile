@@ -25,3 +25,26 @@ export async function unfollow(username: string): Promise<DevInfo> {
   const response = await api.delete(`/devs/${username}/unfollow`);
   return response.data as DevInfo;
 }
+
+export async function getLikedPosts(username: string): Promise<string[]> {
+  const response = await api.get(`/devs/${username}/liked_posts`);
+  return response.data as string[];
+}
+
+export async function likePost(
+  username: string,
+  post_id: string,
+): Promise<string[]> {
+  const response = await api.post(`/posts/${username}/${post_id}/like`);
+
+  return response.data as string[];
+}
+
+export async function dislikePost(
+  username: string,
+  post_id: string,
+): Promise<string[]> {
+  const response = await api.delete(`/posts/${username}/${post_id}/dislike`);
+
+  return response.data as string[];
+}

@@ -63,6 +63,7 @@ const Feed: React.FC = () => {
               .map(post => (
                 <Post
                   key={post._id}
+                  id={post._id}
                   author={post.author}
                   authorPhoto={post.authorPhoto}
                   post={post.post}
