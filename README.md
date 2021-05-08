@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="./src/assets/images/logo.svg" alt="Devopolis"><br>
-  <a href="https://github.com/ricassiocosta/Devopolis-frontend/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/ricassiocosta/Devopolis-frontend?color=008CFF"></a>
+  <img src=".github/logo.svg" alt="Devopolis"><br>
+  <a href="https://github.com/ricassiocosta/devopolis-mobile/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/ricassiocosta/devopolis-mobile?color=008CFF"></a>
 </div><br>
 
 # Devopolis <br>
