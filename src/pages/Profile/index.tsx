@@ -26,25 +26,8 @@ import {
   UnfollowButtonText,
 } from './styles';
 import { setDevInfo } from '../../store/actions/dev';
-
-interface DevInfo {
-  _id: string;
-  name: string;
-  github_username: string;
-  avatar_url: string;
-  bio: string;
-  followedList: string[];
-  likedPosts: string[];
-  techs: string[];
-}
-
-interface Post {
-  _id: string;
-  author: string;
-  thumbnail: string;
-  title: string;
-  post: string;
-}
+import { IDevInfo } from '../../interfaces/IDevInfo';
+import { IPost } from '../../interfaces/IPost';
 
 interface Props {
   route: {
@@ -63,9 +46,9 @@ interface State {
 }
 
 const Profile: React.FC<Props> = ({ route }) => {
-  const [loggedDevInfo, setLoggedDevInfo] = useState<DevInfo>();
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [profileInfo, setProfileInfo] = useState<DevInfo>();
+  const [loggedDevInfo, setLoggedDevInfo] = useState<IDevInfo>();
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [profileInfo, setProfileInfo] = useState<IDevInfo>();
   const [profileConnections, setProfileConnections] = useState(0);
   const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
   const [isFollowed, setIsFollowed] = useState<boolean>(false);

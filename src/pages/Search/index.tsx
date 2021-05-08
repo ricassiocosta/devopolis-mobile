@@ -16,17 +16,11 @@ import {
 } from './styles';
 
 import searchImg from '../../assets/search-icon.png';
-
-interface DevInfo {
-  _id: string;
-  name: string;
-  github_username: string;
-  avatar_url: string;
-}
+import { IDevInfo } from '../../interfaces/IDevInfo';
 
 const Profile: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [queriedDevs, setQueriedDevs] = useState<DevInfo[]>([]);
+  const [queriedDevs, setQueriedDevs] = useState<IDevInfo[]>([]);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 

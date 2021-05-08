@@ -50,21 +50,35 @@ const Post: React.FC<Options> = ({
 
   useEffect(() => {
     const liked = getLikedPosts(devInfo.state.github_username);
-    liked.then(posts => {
-      setLikedPosts(posts);
-    });
+    liked
+      .then(posts => {
+        setLikedPosts(posts);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }, [devInfo.state.github_username, likedPosts]);
 
-  async function handleDislike(postId: string) {
-    const liked = await dislikePost(devInfo.state.github_username, postId);
-
-    setLikedPosts(liked);
+  function handleDislike(postId: string) {
+    const liked = dislikePost(devInfo.state.github_username, postId);
+    liked
+      .then(posts => {
+        setLikedPosts(posts);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
-  async function handleLike(postId: string) {
-    const liked = await likePost(devInfo.state.github_username, postId);
-
-    setLikedPosts(liked);
+  function handleLike(postId: string) {
+    const liked = likePost(devInfo.state.github_username, postId);
+    liked
+      .then(posts => {
+        setLikedPosts(posts);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   return (
