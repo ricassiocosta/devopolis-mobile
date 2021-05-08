@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Image } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -19,27 +19,6 @@ import { Container, Title, LoginButton, LoginText, Background } from './styles';
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
-  useEffect(() => {
-    async function getTokenFromStorage() {
-      const token = await AsyncStorage.getItem('TOKEN');
-      const username = await AsyncStorage.getItem('USERNAME');
-      if (token && username) {
-        getDevInfo(username)
-          .then(devInfo => {
-            if (devInfo) {
-              dispatch(setDevInfo(devInfo));
-              navigation.navigate('NavigationTabs');
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
-    }
-
-    getTokenFromStorage();
-  }, [dispatch, navigation]);
 
   async function handleLogin() {
     const response = await manager.authorize('github');
