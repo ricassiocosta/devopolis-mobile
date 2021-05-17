@@ -30,6 +30,7 @@ const Gateway: React.FC = () => {
             }
           })
           .catch(err => {
+            navigation.navigate('Login');
             console.log(err);
           });
       } else {
