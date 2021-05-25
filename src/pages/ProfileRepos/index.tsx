@@ -18,6 +18,7 @@ import {
   Divider,
   FollowButton,
   FollowButtonText,
+  PageTitle,
   RepoContainer,
   RepoHistory,
   RepoTitle,
@@ -175,6 +176,7 @@ const Profile: React.FC<Props> = ({ route }) => {
           </DevHeaderInfoContainer>
         </DevHeader>
         <Divider />
+        <PageTitle>Repositórios</PageTitle>
         {repos && repos.length > 0 && (
           <RepoHistory>
             <FlatList

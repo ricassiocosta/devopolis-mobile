@@ -5,10 +5,14 @@ import { Image } from 'react-native';
 import HomeImg from '../assets/home_unfocused.png';
 import NewPostImg from '../assets/new_post_unfocused.png';
 import ChatImg from '../assets/chat_unfocused.png';
+import CameraImg from '../assets/camera_unfocused.png';
+import RepoImg from '../assets/repo_unfocused.png';
 
 import FocusedHomeImg from '../assets/home_focused.png';
 import FocusedNewPostImg from '../assets/new_post_focused.png';
 import FocusedChatImg from '../assets/chat_focused.png';
+import FocusedCameraImg from '../assets/camera_focused.png';
+import FocusedRepoImg from '../assets/repo_focused.png';
 
 import Home from '../pages/Feed';
 import NewPost from '../pages/NewPost';
@@ -112,7 +116,7 @@ const ProfileTabs: React.FC<Props> = ({ route }) => (
       component={Profile}
       options={{
         tabBarIcon: ({ focused }) => {
-          return <Image source={focused ? FocusedNewPostImg : NewPostImg} />;
+          return <Image source={focused ? FocusedCameraImg : CameraImg} />;
         },
       }}
       initialParams={{ username: route.params.username }}
@@ -122,7 +126,7 @@ const ProfileTabs: React.FC<Props> = ({ route }) => (
       component={ProfileRepos}
       options={{
         tabBarIcon: ({ focused }) => {
-          return <Image source={focused ? FocusedHomeImg : HomeImg} />;
+          return <Image source={focused ? FocusedRepoImg : RepoImg} />;
         },
       }}
       initialParams={{ username: route.params.username }}

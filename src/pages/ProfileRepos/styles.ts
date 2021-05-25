@@ -51,6 +51,12 @@ export const Divider = styled.View`
   border: 0.5px;
 `;
 
+export const PageTitle = styled.Text`
+  font-family: 'Roboto-Bold';
+  font-size: 20px;
+  margin-left: 16px;
+`;
+
 export const RepoHistory = styled.View`
   flex: 1;
   width: ${Dimensions.get('screen').width + 2}px;
