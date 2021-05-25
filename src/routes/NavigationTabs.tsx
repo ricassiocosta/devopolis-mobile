@@ -14,6 +14,9 @@ import Home from '../pages/Feed';
 import NewPost from '../pages/NewPost';
 import Chat from '../pages/Chat';
 
+import Profile from '../pages/Profile';
+import ProfileRepos from '../pages/ProfileRepos';
+
 const { Navigator, Screen } = createBottomTabNavigator();
 
 const NavigationTabs: React.FC = () => (
@@ -71,4 +74,60 @@ const NavigationTabs: React.FC = () => (
   </Navigator>
 );
 
-export default NavigationTabs;
+interface Props {
+  route: {
+    params: {
+      username: string;
+    };
+  };
+}
+
+const ProfileTabs: React.FC<Props> = ({ route }) => (
+  <Navigator
+    tabBarOptions={{
+      showLabel: false,
+      style: {
+        elevation: 0,
+        shadowOpacity: 0,
+        height: 48,
+      },
+      tabStyle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      iconStyle: {
+        flex: 0,
+        width: 32,
+        height: 27,
+      },
+      inactiveBackgroundColor: '#fff',
+      activeBackgroundColor: '#fff',
+      keyboardHidesTabBar: true,
+    }}
+    initialRouteName='Profile'
+  >
+    <Screen
+      name='Profile'
+      component={Profile}
+      options={{
+        tabBarIcon: ({ focused }) => {
+          return <Image source={focused ? FocusedNewPostImg : NewPostImg} />;
+        },
+      }}
+      initialParams={{ username: route.params.username }}
+    />
+    <Screen
+      name='ProfileRepos'
+      component={ProfileRepos}
+      options={{
+        tabBarIcon: ({ focused }) => {
+          return <Image source={focused ? FocusedHomeImg : HomeImg} />;
+        },
+      }}
+      initialParams={{ username: route.params.username }}
+    />
+  </Navigator>
+);
+
+export { NavigationTabs, ProfileTabs };

@@ -1,4 +1,5 @@
 import { IDevInfo } from '../../interfaces/IDevInfo';
+import { IRepo } from '../../interfaces/IRepo';
 import api from '../api';
 
 export async function getDevInfo(username: string): Promise<IDevInfo> {
@@ -19,6 +20,11 @@ export async function unfollow(username: string): Promise<IDevInfo> {
 export async function getLikedPosts(username: string): Promise<string[]> {
   const response = await api.get(`/devs/${username}/liked_posts`);
   return response.data as string[];
+}
+
+export async function getRepos(username: string): Promise<IRepo[]> {
+  const response = await api.get(`/devs/${username}/repos`);
+  return response.data as IRepo[];
 }
 
 export async function likePost(

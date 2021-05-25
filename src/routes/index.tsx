@@ -5,8 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import LoginPage from '../pages/Login';
-import NavigationTabs from './NavigationTabs';
-import Profile from '../pages/Profile';
+import { NavigationTabs, ProfileTabs } from './NavigationTabs';
 import Search from '../pages/Search';
 import { getDevInfo } from '../services/dev';
 import { setDevInfo } from '../store/actions/dev';
@@ -54,7 +53,7 @@ const AppRoutes: React.FC = () => (
       <App.Screen name='Gateway' component={Gateway} />
       <App.Screen name='Login' component={LoginPage} />
       <App.Screen name='NavigationTabs' component={NavigationTabs} />
-      <App.Screen name='Profile' component={Profile} />
+      <App.Screen name='Profile' component={ProfileTabs} />
       <App.Screen name='Search' component={Search} />
     </App.Navigator>
   </>
