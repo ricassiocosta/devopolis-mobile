@@ -10,7 +10,7 @@ export async function getDevInfo(username: string): Promise<IDevInfo> {
 
 export async function follow(username: string): Promise<IDevInfo> {
   const config = await getConfig();
-  const response = await api.post(`/devs/${username}/follow`, config);
+  const response = await api.post(`/devs/${username}/follow`, {}, config);
   return response.data as IDevInfo;
 }
 
@@ -37,7 +37,11 @@ export async function likePost(
   post_id: string,
 ): Promise<string[]> {
   const config = await getConfig();
-  const response = await api.post(`/posts/${username}/${post_id}/like`, config);
+  const response = await api.post(
+    `/posts/${username}/${post_id}/like`,
+    {},
+    config,
+  );
 
   return response.data as string[];
 }

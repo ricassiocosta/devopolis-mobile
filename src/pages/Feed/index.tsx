@@ -9,19 +9,12 @@ import Header from '../../components/Header';
 import Post from '../../components/Post';
 
 import { Container } from './styles';
-
-interface PostInterface {
-  _id: string;
-  author: string;
-  authorPhoto: string;
-  post: string;
-  thumbnail: string;
-}
+import { IPost } from '../../interfaces/IPost';
 
 const Feed: React.FC = () => {
   const navigation = useNavigation();
 
-  const [feed, setFeed] = useState<PostInterface[]>([]);
+  const [feed, setFeed] = useState<IPost[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
