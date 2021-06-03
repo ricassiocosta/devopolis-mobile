@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import { Linking, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import { getPosts } from '../../services/posts';
-import { getDevInfo, follow, unfollow, getRepos } from '../../services/dev';
+import { useNavigation } from '@react-navigation/native';
+import { follow, unfollow, getRepos } from '../../services/dev';
 
 import Header from '../../components/Header';
 import { Container } from '../Login/styles';
@@ -27,10 +26,10 @@ import {
   UnfollowButton,
   UnfollowButtonText,
 } from './styles';
-import { setDevInfo } from '../../store/actions/dev';
 import { IDevInfo } from '../../interfaces/IDevInfo';
 import { IRepo } from '../../interfaces/IRepo';
 import { IPost } from '../../interfaces/IPost';
+import getLoggedDevInfo from '../../utils/getLoggedDevInfo';
 
 interface Props {
   route: {
@@ -40,97 +39,108 @@ interface Props {
   };
 }
 
-interface State {
-  dev: {
-    devInfo: {
-      github_username: string;
-    };
-  };
-}
-
 const Profile: React.FC<Props> = ({ route }) => {
-  const [loggedDevInfo, setLoggedDevInfo] = useState<IDevInfo>();
+  const navigation = useNavigation();
+
+  const [profileInfo, setProfileInfo] = useState<IDevInfo>();
   const [repos, setRepos] = useState<IRepo[]>([]);
   const [posts, setPosts] = useState<IPost[]>([]);
-  const [profileInfo, setProfileInfo] = useState<IDevInfo>();
-  const [profileConnections, setProfileConnections] = useState(0);
-  const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
+  const [isOwnProfile, setIsOwnProfile] = useState<boolean>(true);
   const [isFollowed, setIsFollowed] = useState<boolean>(false);
-  const [username, setUsername] = useState('');
-  const loggedDev = useSelector((state: State) => ({
-    state: state.dev.devInfo,
-  }));
-  const dispatch = useDispatch();
+  const [loggedDev, setLoggedDev] = useState<IDevInfo>();
 
   useEffect(() => {
-    setUsername(route.params.username);
+    async function getLoggedDev() {
+      try {
+        const devInfo = await getLoggedDevInfo();
+        setLoggedDev(devInfo);
+      } catch (err) {
+        console.log(err);
+        navigation.navigate('Login');
+      }
+    }
+
+    getLoggedDev();
+  }, [navigation]);
+
+  useEffect(() => {
+    async function getProfile() {
+      if (route.params.username) {
+        const profileString = await AsyncStorage.getItem('PROFILE_INFO');
+        if (profileString) {
+          const profile = JSON.parse(profileString) as IDevInfo;
+          if (profile) {
+            setProfileInfo(profile);
+          }
+        }
+      }
+    }
+    getProfile();
   }, [route.params.username]);
 
   useEffect(() => {
-    async function getDev() {
-      const devString = await AsyncStorage.getItem('PROFILE_INFO');
-      if (devString) {
-        const dev = JSON.parse(devString) as IDevInfo;
-        setLoggedDevInfo(dev);
+    async function getProfilePosts() {
+      if (profileInfo) {
+        const returnedPostsString = await AsyncStorage.getItem('PROFILE_POSTS');
+        if (returnedPostsString) {
+          const returnedPosts = JSON.parse(returnedPostsString) as IPost[];
+          if (returnedPosts) {
+            setPosts(returnedPosts);
+          }
+        }
       }
     }
-
-    getDev();
-  }, [username]);
+    setPosts([]);
+    getProfilePosts();
+  }, [profileInfo]);
 
   useEffect(() => {
     async function callApi() {
-      const postsString = await AsyncStorage.getItem('PROFILE_POSTS');
-      if (postsString) {
-        const returnedPosts = JSON.parse(postsString) as IPost[];
-        setPosts(returnedPosts);
-      }
-    }
-
-    callApi();
-  }, [username]);
-
-  useEffect(() => {
-    async function callApi() {
-      const returnedRepos = await getRepos(username);
-      if (returnedRepos) {
-        setRepos(returnedRepos);
+      if (profileInfo) {
+        const returnedRepos = await getRepos(profileInfo.github_username);
+        if (returnedRepos) {
+          setRepos(returnedRepos);
+        }
       }
     }
     callApi();
-  }, [username]);
+  }, [profileInfo]);
 
   useEffect(() => {
     function verifyFollow() {
-      if (username === loggedDev.state.github_username) {
-        setIsOwnProfile(true);
-        return;
-      }
+      if (loggedDev && profileInfo) {
+        if (profileInfo.github_username !== loggedDev.github_username) {
+          setIsOwnProfile(false);
+        }
 
-      if (!profileInfo) {
-        return;
-      }
-
-      if (loggedDevInfo) {
-        if (loggedDevInfo.followedList.includes(profileInfo._id)) {
+        if (loggedDev.followedList.includes(profileInfo._id)) {
           setIsFollowed(true);
         } else {
           setIsFollowed(false);
         }
       }
     }
+    setIsOwnProfile(true);
     verifyFollow();
-  }, [loggedDev.state.github_username, loggedDevInfo, profileInfo, username]);
+  }, [loggedDev, profileInfo]);
 
   async function handleFollow() {
-    const response = await follow(username);
-    dispatch(setDevInfo(response));
+    if (profileInfo) {
+      const updatedDev = await follow(profileInfo.github_username);
+      if (updatedDev) {
+        AsyncStorage.setItem('LOGGED_DEV', JSON.stringify(updatedDev));
+      }
+    }
     setIsFollowed(true);
   }
 
   async function handleUnfollow() {
-    const response = await unfollow(username);
-    dispatch(setDevInfo(response));
+    if (profileInfo) {
+      const updatedDev = await unfollow(profileInfo.github_username);
+      if (updatedDev) {
+        AsyncStorage.setItem('LOGGED_DEV', JSON.stringify(updatedDev));
+      }
+    }
     setIsFollowed(false);
   }
 
@@ -171,7 +181,7 @@ const Profile: React.FC<Props> = ({ route }) => {
                   <Bio>{`"${profileInfo.bio}"`}</Bio>
                 </>
               )}
-              <Stats>{`${posts.length} Publicações | ${profileConnections} Conexões`}</Stats>
+              <Stats>{`${posts.length} Publicações | ${profileInfo?.followedList.length} Conexões`}</Stats>
             </View>
           </DevHeaderInfoContainer>
         </DevHeader>

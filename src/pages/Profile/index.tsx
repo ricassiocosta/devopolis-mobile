@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import { getPosts } from '../../services/posts';
 import { getDevInfo, follow, unfollow } from '../../services/dev';
 
@@ -26,9 +26,9 @@ import {
   UnfollowButton,
   UnfollowButtonText,
 } from './styles';
-import { setDevInfo } from '../../store/actions/dev';
 import { IDevInfo } from '../../interfaces/IDevInfo';
 import { IPost } from '../../interfaces/IPost';
+import getLoggedDevInfo from '../../utils/getLoggedDevInfo';
 
 interface Props {
   route: {
@@ -38,93 +38,94 @@ interface Props {
   };
 }
 
-interface State {
-  dev: {
-    devInfo: {
-      github_username: string;
-    };
-  };
-}
-
 const Profile: React.FC<Props> = ({ route }) => {
-  const [loggedDevInfo, setLoggedDevInfo] = useState<IDevInfo>();
-  const [posts, setPosts] = useState<IPost[]>([]);
+  const navigation = useNavigation();
+
   const [profileInfo, setProfileInfo] = useState<IDevInfo>();
-  const [profileConnections, setProfileConnections] = useState(0);
-  const [isOwnProfile, setIsOwnProfile] = useState<boolean>(false);
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [isOwnProfile, setIsOwnProfile] = useState<boolean>(true);
   const [isFollowed, setIsFollowed] = useState<boolean>(false);
-  const [username, setUsername] = useState('');
-  const loggedDev = useSelector((state: State) => ({
-    state: state.dev.devInfo,
-  }));
-  const dispatch = useDispatch();
+  const [loggedDev, setLoggedDev] = useState<IDevInfo>();
 
   useEffect(() => {
-    setUsername(route.params.username);
+    async function getLoggedDev() {
+      try {
+        const devInfo = await getLoggedDevInfo();
+        setLoggedDev(devInfo);
+      } catch (err) {
+        console.log(err);
+        navigation.navigate('Login');
+      }
+    }
+
+    getLoggedDev();
+  }, [navigation]);
+
+  useEffect(() => {
+    async function getProfile() {
+      if (route.params.username) {
+        const profile = await getDevInfo(route.params.username);
+        if (profile) {
+          await AsyncStorage.setItem('PROFILE_INFO', JSON.stringify(profile));
+          setProfileInfo(profile);
+        }
+      }
+    }
+    getProfile();
   }, [route.params.username]);
 
   useEffect(() => {
-    async function getDev() {
-      if (username) {
-        const dev = await getDevInfo(username);
-        if (dev.followedList) {
-          setProfileInfo(dev);
-          const connections = dev.followedList.length;
-          setProfileConnections(connections);
+    function verifyFollow() {
+      if (loggedDev && profileInfo) {
+        if (profileInfo.github_username !== loggedDev.github_username) {
+          setIsOwnProfile(false);
         }
 
-        await AsyncStorage.setItem('PROFILE_INFO', JSON.stringify(dev));
-        setLoggedDevInfo(dev);
-      }
-    }
-    getDev();
-  }, [username]);
-
-  useEffect(() => {
-    async function callApi() {
-      const returnedPosts = await getPosts(username);
-      if (returnedPosts) {
-        await AsyncStorage.setItem(
-          'PROFILE_POSTS',
-          JSON.stringify(returnedPosts),
-        );
-        setPosts(returnedPosts);
-      }
-    }
-    callApi();
-  }, [username]);
-
-  useEffect(() => {
-    function verifyFollow() {
-      if (username === loggedDev.state.github_username) {
-        setIsOwnProfile(true);
-        return;
-      }
-
-      if (!profileInfo) {
-        return;
-      }
-
-      if (loggedDevInfo) {
-        if (loggedDevInfo.followedList.includes(profileInfo._id)) {
+        if (loggedDev.followedList.includes(profileInfo._id)) {
           setIsFollowed(true);
         } else {
           setIsFollowed(false);
         }
       }
     }
+    setIsOwnProfile(true);
     verifyFollow();
-  }, [loggedDev.state.github_username, loggedDevInfo, profileInfo, username]);
+  }, [loggedDev, profileInfo]);
+
+  useEffect(() => {
+    async function getProfilePosts() {
+      if (profileInfo) {
+        const returnedPosts = await getPosts(profileInfo.github_username);
+        if (returnedPosts) {
+          await AsyncStorage.setItem(
+            'PROFILE_POSTS',
+            JSON.stringify(returnedPosts),
+          );
+          setPosts(returnedPosts);
+        }
+      }
+    }
+    setPosts([]);
+    getProfilePosts();
+  }, [profileInfo]);
 
   async function handleFollow() {
-    const response = await follow(username);
-    dispatch(setDevInfo(response));
+    if (profileInfo) {
+      const updatedDev = await follow(profileInfo.github_username);
+      if (updatedDev) {
+        AsyncStorage.setItem('LOGGED_DEV', JSON.stringify(updatedDev));
+      }
+    }
     setIsFollowed(true);
   }
 
   async function handleUnfollow() {
-    const response = await unfollow(username);
-    dispatch(setDevInfo(response));
+    if (profileInfo) {
+      const updatedDev = await unfollow(profileInfo.github_username);
+      if (updatedDev) {
+        AsyncStorage.setItem('LOGGED_DEV', JSON.stringify(updatedDev));
+      }
+    }
     setIsFollowed(false);
   }
 
@@ -161,7 +162,7 @@ const Profile: React.FC<Props> = ({ route }) => {
                   <Bio>{`"${profileInfo.bio}"`}</Bio>
                 </>
               )}
-              <Stats>{`${posts.length} Publicações | ${profileConnections} Conexões`}</Stats>
+              <Stats>{`${posts.length} Publicações | ${loggedDev?.followedList.length} Conexões`}</Stats>
             </View>
           </DevHeaderInfoContainer>
         </DevHeader>
