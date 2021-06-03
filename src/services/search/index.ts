@@ -1,9 +1,8 @@
 import { IDevInfo } from '../../interfaces/IDevInfo';
-import api from '../api';
+import { api, getConfig } from '../api';
 
 export const search = async (searchQuery: string): Promise<IDevInfo[]> => {
-  const response = await api.get('/search', {
-    params: { search_query: searchQuery },
-  });
+  const config = await getConfig();
+  const response = await api.get(`/search?search_query=${searchQuery}`, config);
   return response.data.devs as IDevInfo[];
 };

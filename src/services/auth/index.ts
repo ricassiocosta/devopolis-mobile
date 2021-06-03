@@ -1,4 +1,4 @@
-import api from '../api';
+import { api, getConfig } from '../api';
 
 interface Response {
   token: string;
@@ -11,7 +11,8 @@ export const authenticate = async (githubToken: string): Promise<Response> => {
 };
 
 export const tokenIsValid = async (): Promise<boolean> => {
-  const response = await api.get('/validate_token');
+  const config = await getConfig();
+  const response = await api.get('/validate_token', config);
   if (response.status !== 200) {
     return false;
   }

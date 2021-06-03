@@ -17,15 +17,20 @@ const Login: React.FC = () => {
   const navigation = useNavigation();
 
   async function handleLogin() {
-    const response = await manager.authorize('github');
-    const githubToken = response.response.credentials.accessToken;
-    const { token, username } = await authenticate(githubToken);
-    const devInfo = await getDevInfo(username);
+    try {
+      const response = await manager.authorize('github');
+      const githubToken = response.response.credentials.accessToken;
+      const { token, username } = await authenticate(githubToken);
 
-    await AsyncStorage.setItem('TOKEN', token);
-    await AsyncStorage.setItem('LOGGED_DEV', JSON.stringify(devInfo));
+      await AsyncStorage.setItem('TOKEN', token);
 
-    navigation.navigate('NavigationTabs');
+      const devInfo = await getDevInfo(username);
+      await AsyncStorage.setItem('LOGGED_DEV', JSON.stringify(devInfo));
+
+      navigation.navigate('NavigationTabs');
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (

@@ -1,10 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
+import AsyncStorage from '@react-native-community/async-storage';
 import Header from '../../components/Header';
 import { search } from '../../services/search';
-import { logout } from '../../store/actions';
 import {
   Container,
   QueriedDev,
@@ -21,7 +20,6 @@ import { IDevInfo } from '../../interfaces/IDevInfo';
 const Profile: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [queriedDevs, setQueriedDevs] = useState<IDevInfo[]>([]);
-  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const onSearch = async (text: string) => {
@@ -35,7 +33,8 @@ const Profile: React.FC = () => {
           setQueriedDevs(devs);
         }
       } catch (err) {
-        dispatch(logout());
+        await AsyncStorage.setItem('TOKEN', '');
+        navigation.navigate('Login');
       }
     } else {
       setQueriedDevs([]);
