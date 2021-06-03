@@ -23,7 +23,6 @@ const Login: React.FC = () => {
     const devInfo = await getDevInfo(username);
 
     await AsyncStorage.setItem('TOKEN', token);
-    console.log(token);
     await AsyncStorage.setItem('LOGGED_DEV', JSON.stringify(devInfo));
 
     navigation.navigate('NavigationTabs');

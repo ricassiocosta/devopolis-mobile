@@ -16,7 +16,6 @@ const Gateway: React.FC = () => {
   useEffect(() => {
     async function getTokenFromStorage() {
       const token = await AsyncStorage.getItem('TOKEN');
-      console.log(token);
 
       if (token) {
         tokenIsValid()

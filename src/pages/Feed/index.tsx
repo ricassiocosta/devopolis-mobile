@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
-import { useDispatch } from 'react-redux';
 
+import AsyncStorage from '@react-native-community/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import { getDashboard } from '../../services/dashboard';
-import { logout } from '../../store/actions';
 
 import Header from '../../components/Header';
 import Post from '../../components/Post';
@@ -19,35 +19,38 @@ interface PostInterface {
 }
 
 const Feed: React.FC = () => {
-  const dispatch = useDispatch();
-  const [posts, setPosts] = useState<PostInterface[]>([]);
+  const navigation = useNavigation();
+
+  const [feed, setFeed] = useState<PostInterface[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    async function callApi() {
+    async function getFeed() {
       try {
         const receivedPosts = await getDashboard();
-        setPosts(receivedPosts);
+        setFeed(receivedPosts);
       } catch (error) {
-        dispatch(logout());
+        await AsyncStorage.setItem('TOKEN', '');
+        navigation.navigate('Login');
       }
     }
-    callApi();
-  }, [dispatch]);
+    getFeed();
+  }, [navigation]);
 
   const HandleRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    async function callApi() {
+    async function refreshFeed() {
       try {
         const receivedPosts = await getDashboard();
-        setPosts(receivedPosts);
+        setFeed(receivedPosts);
       } catch (error) {
-        dispatch(logout());
+        await AsyncStorage.setItem('TOKEN', '');
+        navigation.navigate('Login');
       }
     }
-    callApi();
+    refreshFeed();
     setRefreshing(false);
-  }, [dispatch]);
+  }, [navigation]);
 
   return (
     <>
@@ -58,8 +61,8 @@ const Feed: React.FC = () => {
         }
       >
         <Container>
-          {posts &&
-            posts
+          {feed &&
+            feed
               .map(post => (
                 <Post
                   key={post._id}

@@ -1,30 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { useSelector } from 'react-redux';
 import searchImg from '../../assets/search.png';
 
 import { Container, Logo, Avatar, SearchImage, Search } from './styles';
+import getLoggedDevInfo from '../../utils/getLoggedDevInfo';
+import { IDevInfo } from '../../interfaces/IDevInfo';
 
 interface Options {
   searchEnabled?: boolean;
 }
 
-interface State {
-  dev: {
-    devInfo: {
-      github_username: string;
-      avatar_url: string;
-    };
-  };
-}
-
 const Header: React.FC<Options> = ({ searchEnabled = false }) => {
   const navigation = useNavigation();
-  const devInfo = useSelector((state: State) => ({
-    state: state.dev.devInfo,
-  }));
+  const [loggedDev, setLoggedDev] = useState<IDevInfo>();
+
+  useEffect(() => {
+    async function getLoggedDev() {
+      try {
+        const devInfo = await getLoggedDevInfo();
+        setLoggedDev(devInfo);
+      } catch (err) {
+        console.log(err);
+        navigation.navigate('Login');
+      }
+    }
+
+    getLoggedDev();
+  }, [navigation]);
 
   function handleSearch() {
     navigation.navigate('Search');
@@ -38,15 +42,17 @@ const Header: React.FC<Options> = ({ searchEnabled = false }) => {
           <SearchImage source={searchImg} />
         </Search>
       )}
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('Profile', {
-            username: devInfo.state.github_username,
-          })
-        }
-      >
-        <Avatar source={{ uri: devInfo.state.avatar_url }} />
-      </TouchableOpacity>
+      {loggedDev && (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('Profile', {
+              username: loggedDev.github_username,
+            })
+          }
+        >
+          <Avatar source={{ uri: loggedDev.avatar_url }} />
+        </TouchableOpacity>
+      )}
     </Container>
   );
 };
