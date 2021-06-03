@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 import { getPosts } from '../../services/posts';
 import { getDevInfo, follow, unfollow } from '../../services/dev';
 
@@ -64,23 +65,29 @@ const Profile: React.FC<Props> = ({ route }) => {
 
   useEffect(() => {
     async function getDev() {
-      let dev = await getDevInfo(username);
-      if (dev.followedList) {
-        setProfileInfo(dev);
-        const connections = dev.followedList.length;
-        setProfileConnections(connections);
-      }
+      if (username) {
+        const dev = await getDevInfo(username);
+        if (dev.followedList) {
+          setProfileInfo(dev);
+          const connections = dev.followedList.length;
+          setProfileConnections(connections);
+        }
 
-      dev = await getDevInfo(loggedDev.state.github_username);
-      setLoggedDevInfo(dev);
+        await AsyncStorage.setItem('PROFILE_INFO', JSON.stringify(dev));
+        setLoggedDevInfo(dev);
+      }
     }
     getDev();
-  }, [loggedDev.state.github_username, username]);
+  }, [username]);
 
   useEffect(() => {
     async function callApi() {
       const returnedPosts = await getPosts(username);
       if (returnedPosts) {
+        await AsyncStorage.setItem(
+          'PROFILE_POSTS',
+          JSON.stringify(returnedPosts),
+        );
         setPosts(returnedPosts);
       }
     }
@@ -89,7 +96,7 @@ const Profile: React.FC<Props> = ({ route }) => {
 
   useEffect(() => {
     function verifyFollow() {
-      if (loggedDev.state.github_username === username) {
+      if (username === loggedDev.state.github_username) {
         setIsOwnProfile(true);
         return;
       }

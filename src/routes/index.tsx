@@ -2,31 +2,26 @@ import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import AsyncStorage from '@react-native-community/async-storage';
-import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import LoginPage from '../pages/Login';
 import { NavigationTabs, ProfileTabs } from './NavigationTabs';
 import Search from '../pages/Search';
-import { getDevInfo } from '../services/dev';
-import { setDevInfo } from '../store/actions/dev';
+import { tokenIsValid } from '../services/auth';
 
 const App = createStackNavigator();
 
 const Gateway: React.FC = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   useEffect(() => {
     async function getTokenFromStorage() {
       const token = await AsyncStorage.getItem('TOKEN');
-      const username = await AsyncStorage.getItem('USERNAME');
-      if (token && username) {
-        getDevInfo(username)
-          .then(devInfo => {
-            if (devInfo) {
-              dispatch(setDevInfo(devInfo));
-              navigation.navigate('NavigationTabs');
-            }
+      console.log(token);
+
+      if (token) {
+        tokenIsValid()
+          .then(() => {
+            navigation.navigate('NavigationTabs');
           })
           .catch(err => {
             navigation.navigate('Login');
@@ -38,7 +33,7 @@ const Gateway: React.FC = () => {
     }
 
     getTokenFromStorage();
-  }, [dispatch, navigation]);
+  }, [navigation]);
 
   return <></>;
 };

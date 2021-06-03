@@ -1,13 +1,10 @@
 import React from 'react';
 import { Image } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import manager from '../../oauth/manager';
 import { authenticate } from '../../services/auth';
-import { setDevInfo } from '../../store/actions/dev';
-import { setToken } from '../../store/actions';
 import { getDevInfo } from '../../services/dev';
 
 import logo from '../../assets/logo.png';
@@ -17,20 +14,17 @@ import background from '../../assets/background.png';
 import { Container, Title, LoginButton, LoginText, Background } from './styles';
 
 const Login: React.FC = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   async function handleLogin() {
     const response = await manager.authorize('github');
     const githubToken = response.response.credentials.accessToken;
     const { token, username } = await authenticate(githubToken);
+    const devInfo = await getDevInfo(username);
 
     await AsyncStorage.setItem('TOKEN', token);
-    await AsyncStorage.setItem('USERNAME', username);
-
-    dispatch(setToken(token));
-    const devInfo = await getDevInfo(username);
-    dispatch(setDevInfo(devInfo));
+    console.log(token);
+    await AsyncStorage.setItem('LOGGED_DEV', JSON.stringify(devInfo));
 
     navigation.navigate('NavigationTabs');
   }
