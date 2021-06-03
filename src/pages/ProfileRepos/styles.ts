@@ -64,6 +64,13 @@ export const RepoHistory = styled.View`
   margin-top: 8px;
 `;
 
+export const RepoHistoryLoading = styled.ActivityIndicator`
+  flex: 1;
+  width: ${Dimensions.get('screen').width + 2}px;
+  margin-left: -1px;
+  margin-top: 8px;
+`;
+
 export const RepoContainer = styled.TouchableOpacity`
   margin: 8px 16px;
   background: #fbfbfb;

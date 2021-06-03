@@ -20,6 +20,7 @@ import {
   FollowButton,
   FollowButtonText,
   PostHistory,
+  PostHistoryLoading,
   PostThumbnail,
   Stats,
   ThumbnailContainer,
@@ -169,7 +170,7 @@ const Profile: React.FC<Props> = ({ route }) => {
           </DevHeaderInfoContainer>
         </DevHeader>
         <Divider />
-        {posts && posts.length > 0 && (
+        {posts && posts.length > 0 ? (
           <PostHistory>
             <FlatList
               columnWrapperStyle={{ justifyContent: 'space-between' }}
@@ -187,6 +188,8 @@ const Profile: React.FC<Props> = ({ route }) => {
               )}
             />
           </PostHistory>
+        ) : (
+          <PostHistoryLoading size='large' color='#008cff' />
         )}
       </Container>
     </>

@@ -58,6 +58,13 @@ export const PostHistory = styled.View`
   margin-top: 8px;
 `;
 
+export const PostHistoryLoading = styled.ActivityIndicator`
+  flex: 1;
+  width: ${Dimensions.get('screen').width + 2}px;
+  margin-left: -1px;
+  margin-top: 8px;
+`;
+
 export const PostThumbnail = styled(Image)`
   height: ${Dimensions.get('screen').width / 3 + 10}px;
   width: ${Dimensions.get('screen').width / 3}px;

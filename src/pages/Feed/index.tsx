@@ -8,7 +8,7 @@ import { getDashboard } from '../../services/dashboard';
 import Header from '../../components/Header';
 import Post from '../../components/Post';
 
-import { Container } from './styles';
+import { Container, FeedLoading } from './styles';
 import { IPost } from '../../interfaces/IPost';
 
 const Feed: React.FC = () => {
@@ -54,7 +54,7 @@ const Feed: React.FC = () => {
         }
       >
         <Container>
-          {feed &&
+          {feed.length > 0 ? (
             feed
               .map(post => (
                 <Post
@@ -66,7 +66,10 @@ const Feed: React.FC = () => {
                   thumbnail={post.thumbnail}
                 />
               ))
-              .reverse()}
+              .reverse()
+          ) : (
+            <FeedLoading size='large' color='#008cff' />
+          )}
         </Container>
       </ScrollView>
     </>

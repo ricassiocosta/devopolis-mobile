@@ -21,6 +21,7 @@ import {
   PageTitle,
   RepoContainer,
   RepoHistory,
+  RepoHistoryLoading,
   RepoTitle,
   Stats,
   UnfollowButton,
@@ -187,7 +188,7 @@ const Profile: React.FC<Props> = ({ route }) => {
         </DevHeader>
         <Divider />
         <PageTitle>Repositórios</PageTitle>
-        {repos && repos.length > 0 && (
+        {repos && repos.length > 0 ? (
           <RepoHistory>
             <FlatList
               data={repos}
@@ -206,6 +207,8 @@ const Profile: React.FC<Props> = ({ route }) => {
               )}
             />
           </RepoHistory>
+        ) : (
+          <RepoHistoryLoading size='large' color='#008cff' />
         )}
       </Container>
     </>
