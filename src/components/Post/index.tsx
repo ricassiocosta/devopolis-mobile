@@ -3,7 +3,6 @@ import { Image } from 'react-native';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
 import {
   Container,
   PostTitle,
@@ -18,6 +17,8 @@ import {
 import likeImg from '../../assets/like.png';
 import likedImg from '../../assets/liked.png';
 import { dislikePost, getLikedPosts, likePost } from '../../services/dev';
+import { IDevInfo } from '../../interfaces/IDevInfo';
+import getLoggedDevInfo from '../../utils/getLoggedDevInfo';
 
 interface Options {
   authorPhoto: string;
@@ -27,14 +28,6 @@ interface Options {
   thumbnail: string;
 }
 
-interface State {
-  dev: {
-    devInfo: {
-      github_username: string;
-    };
-  };
-}
-
 const Post: React.FC<Options> = ({
   authorPhoto,
   id,
@@ -42,43 +35,61 @@ const Post: React.FC<Options> = ({
   post,
   thumbnail,
 }) => {
-  const [likedPosts, setLikedPosts] = useState<string[]>(['']);
   const navigation = useNavigation();
-  const devInfo = useSelector((state: State) => ({
-    state: state.dev.devInfo,
-  }));
+  const [likedPosts, setLikedPosts] = useState<string[]>(['']);
+  const [loggedDev, setLoggedDev] = useState<IDevInfo>();
 
   useEffect(() => {
-    const liked = getLikedPosts(devInfo.state.github_username);
-    liked
-      .then(posts => {
-        setLikedPosts(posts);
-      })
-      .catch(err => {
+    async function getLoggedDev() {
+      try {
+        const devInfo = await getLoggedDevInfo();
+        setLoggedDev(devInfo);
+      } catch (err) {
         console.log(err);
-      });
-  }, [devInfo.state.github_username, likedPosts]);
+        navigation.navigate('Login');
+      }
+    }
+
+    getLoggedDev();
+  }, [navigation]);
+
+  useEffect(() => {
+    if (loggedDev) {
+      const liked = getLikedPosts(loggedDev.github_username);
+      liked
+        .then(posts => {
+          setLikedPosts(posts);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [loggedDev, likedPosts]);
 
   function handleDislike(postId: string) {
-    const liked = dislikePost(devInfo.state.github_username, postId);
-    liked
-      .then(posts => {
-        setLikedPosts(posts);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (loggedDev) {
+      const liked = dislikePost(loggedDev.github_username, postId);
+      liked
+        .then(posts => {
+          setLikedPosts(posts);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 
   function handleLike(postId: string) {
-    const liked = likePost(devInfo.state.github_username, postId);
-    liked
-      .then(posts => {
-        setLikedPosts(posts);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (loggedDev) {
+      const liked = likePost(loggedDev.github_username, postId);
+      liked
+        .then(posts => {
+          setLikedPosts(posts);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 
   return (
