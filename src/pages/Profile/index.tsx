@@ -162,7 +162,9 @@ const Profile: React.FC<Props> = ({ route }) => {
                   <Bio>{`"${profileInfo.bio}"`}</Bio>
                 </>
               )}
-              <Stats>{`${posts.length} Publicações | ${loggedDev?.followedList.length} Conexões`}</Stats>
+              {posts && profileInfo && (
+                <Stats>{`${posts.length} Publicações | ${profileInfo?.followedList.length} Conexões`}</Stats>
+              )}
             </View>
           </DevHeaderInfoContainer>
         </DevHeader>
