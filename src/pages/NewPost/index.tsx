@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { KeyboardAvoidingView, Keyboard, ToastAndroid } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImagePicker, { Image } from 'react-native-image-crop-picker';
 import { useNavigation } from '@react-navigation/native';
@@ -41,12 +41,19 @@ const NewPost: React.FC = () => {
     if (description && postImage) {
       if (postImage.data) {
         createPost(description, postImage.data);
+        setDescription('');
+        setPostImage(undefined);
       }
     }
 
-    setDescription('');
-    setPostImage(undefined);
-    Alert.alert('Post enviado com sucesso!');
+    ToastAndroid.showWithGravityAndOffset(
+      'Post enviado com sucesso!',
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      70,
+    );
+
     Keyboard.dismiss();
     navigation.navigate('Home');
   }
