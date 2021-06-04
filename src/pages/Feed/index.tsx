@@ -17,19 +17,6 @@ const Feed: React.FC = () => {
   const [feed, setFeed] = useState<IPost[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    async function getFeed() {
-      try {
-        const receivedPosts = await getDashboard();
-        setFeed(receivedPosts);
-      } catch (error) {
-        await AsyncStorage.setItem('TOKEN', '');
-        navigation.navigate('Login');
-      }
-    }
-    getFeed();
-  }, [navigation]);
-
   const HandleRefresh = React.useCallback(async () => {
     setRefreshing(true);
     async function refreshFeed() {
@@ -45,6 +32,23 @@ const Feed: React.FC = () => {
     setRefreshing(false);
   }, [navigation]);
 
+  useEffect(() => {
+    HandleRefresh();
+  }, [HandleRefresh]);
+
+  const mountPost: React.FC<IPost> = (post: IPost) => {
+    return (
+      <Post
+        key={post._id}
+        id={post._id}
+        author={post.author}
+        authorPhoto={post.authorPhoto}
+        post={post.post}
+        thumbnail={post.thumbnail}
+      />
+    );
+  };
+
   return (
     <>
       <Header searchEnabled />
@@ -54,19 +58,8 @@ const Feed: React.FC = () => {
         }
       >
         <Container>
-          {feed.length > 0 ? (
-            feed
-              .map(post => (
-                <Post
-                  key={post._id}
-                  id={post._id}
-                  author={post.author}
-                  authorPhoto={post.authorPhoto}
-                  post={post.post}
-                  thumbnail={post.thumbnail}
-                />
-              ))
-              .reverse()
+          {feed.length > 0 && !refreshing ? (
+            feed.map(post => mountPost(post)).reverse()
           ) : (
             <FeedLoading size='large' color='#008cff' />
           )}

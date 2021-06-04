@@ -54,16 +54,22 @@ const Post: React.FC<Options> = ({
   }, [navigation]);
 
   useEffect(() => {
+    let mounted = true;
     if (loggedDev) {
       const liked = getLikedPosts(loggedDev.github_username);
       liked
         .then(posts => {
-          setLikedPosts(posts);
+          if (mounted) {
+            setLikedPosts(posts);
+          }
         })
         .catch(err => {
           console.log(err);
         });
     }
+    return function cleanup() {
+      mounted = false;
+    };
   }, [loggedDev, likedPosts]);
 
   function handleDislike(postId: string) {
