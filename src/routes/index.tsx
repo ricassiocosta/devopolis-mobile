@@ -24,7 +24,7 @@ const Gateway: React.FC = () => {
           })
           .catch(err => {
             navigation.navigate('Login');
-            console.log(err);
+            throw new Error(err);
           });
       } else {
         navigation.navigate('Login');

@@ -56,8 +56,7 @@ const Profile: React.FC<Props> = ({ route }) => {
         const devInfo = await getLoggedDevInfo();
         setLoggedDev(devInfo);
       } catch (err) {
-        console.log(err);
-        navigation.navigate('Login');
+        throw new Error(err);
       }
     }
 

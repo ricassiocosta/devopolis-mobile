@@ -29,7 +29,7 @@ const Login: React.FC = () => {
 
       navigation.navigate('NavigationTabs');
     } catch (err) {
-      console.log(err);
+      throw new Error(err);
     }
   }
 

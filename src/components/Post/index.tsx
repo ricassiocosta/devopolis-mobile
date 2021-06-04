@@ -45,8 +45,7 @@ const Post: React.FC<Options> = ({
         const devInfo = await getLoggedDevInfo();
         setLoggedDev(devInfo);
       } catch (err) {
-        console.log(err);
-        navigation.navigate('Login');
+        throw new Error(err);
       }
     }
 
@@ -64,7 +63,7 @@ const Post: React.FC<Options> = ({
           }
         })
         .catch(err => {
-          console.log(err);
+          throw new Error(err);
         });
     }
     return function cleanup() {
@@ -80,7 +79,7 @@ const Post: React.FC<Options> = ({
           setLikedPosts(posts);
         })
         .catch(err => {
-          console.log(err);
+          throw new Error(err);
         });
     }
   }
@@ -93,7 +92,7 @@ const Post: React.FC<Options> = ({
           setLikedPosts(posts);
         })
         .catch(err => {
-          console.log(err);
+          throw new Error(err);
         });
     }
   }
