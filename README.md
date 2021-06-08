@@ -3,6 +3,8 @@
   <a href="https://github.com/ricassiocosta/devopolis-mobile/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/ricassiocosta/devopolis-mobile?color=008CFF"></a>
 </div><br>
 
+![devopolis](.github/devopolis.gif)
+
 # Devopolis <br>
 
 Devopolis is a social network created with the aim of bringing together developers who share the same interests, so that they can exchange experiences and participate in a community that encourages them to always evolve.
